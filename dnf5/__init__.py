@@ -14,8 +14,9 @@ def cli():
     help="The CSV file containing the nameserver data",
     required=True)
 def get_csv_templates(out):
+    """Create csv template files, used to add nameservers and Domains."""
     nameserver_template = ["Name","Country","IP","Company"]
-    ttl_template = ["Hosts"]
+    ttl_template = ["Domains"]
     with open(f"ns_{out}", "w+") as nameserver_file:
         writer = csv.writer(nameserver_file)
         writer.writerow(nameserver_template)
@@ -48,6 +49,7 @@ def get_csv_templates(out):
     help="Time to wait between DNS requests in minutes.",
     required=False)
 def propagation_logger(nameservers, output, target, domain, registrar, polltime):
+    """Log the propagation time of 'A' records. Run this command immediately after changing the records."""
     if not os.path.exists(nameservers):
         print(f"Could not find the given path '{nameservers}' use --nameservers to specify another file.")
         return
@@ -61,15 +63,16 @@ def propagation_logger(nameservers, output, target, domain, registrar, polltime)
 
 
 @cli.command()
-@click.option("--hosts",
+@click.option("--domains",
     default="ttl_template.csv",
-    help="The CSV file containing the hosts data",
+    help="The CSV file containing the domains",
     required=True)
-def get_ttl_data(hosts):
-    if not os.path.exists(hosts):
-        print(f"Could not find the given path '{hosts}' use --hosts to specify another file.")
+def get_ttl_data(domains):
+    """Graph the TTL of various domains."""
+    if not os.path.exists(domains):
+        print(f"Could not find the given path '{domains}' use --domains to specify another file.")
         return
-    host_list = get_ttl_hosts(hosts)
+    host_list = get_ttl_hosts(domains)
     ttl_list = get_ttl(host_list=host_list)
     visualize(host_list, ttl_list)
     visualize_metadata(ttl_list=ttl_list)
