@@ -1,0 +1,13 @@
+*.txt
+*.pkl
+Backup/
+test.py
+*.pyc
+__pycache__/
+Output/
+settings.json
+ns_*.csv
+ttl_*.csv
+!ttl_hosts.csv
+!requirements.txt
+dnf5.egg-info/
